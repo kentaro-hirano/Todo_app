@@ -1,0 +1,51 @@
+<div class= "container">
+  <div class= "row">
+    <div class= "col-lg-8">
+      <h2 class= "header">Todoリスト</h2>
+    </div>
+    <div class = "col-lg-4">
+      <% if @tasks.exists? %>
+        <%= link_to "すべて削除", destroy_all_tasks_path, method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-danger btn-sm all_destroy" %>
+      <% end %>
+    </div>
+  </div>
+  <div class = "row">
+    <div class = "col-lg">
+        <table class= "table table-striped">
+          <% @tasks.each do |task| %>
+          <tr>
+            <td><%= task.title %></td>
+            <td><%= task.body %></td>
+            <td><%= link_to "完了", complete_task_path(task), method: :delete, data: {}, class: "btn btn-info btn-sm" %></td>
+            <td><%= link_to "編集", edit_task_path(task), class: "btn btn-primary btn-sm" %></td>
+            <td><%= link_to "削除", task_path(task), method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-danger btn-sm" %></td>
+          </tr>
+          <% end %>
+        </table>
+    </div>
+  </div>
+  <div class= "row">
+    <div class= "col-lg-4">
+      <% if @task.errors.any? %>
+        <div class="alert alert-warning">
+          <ul class= "error">
+            <% @task.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <%= form_with(model: @task, url: {action: 'create'}, local: true) do |f| %>
+      <div class= "form-group">
+          <%= f.label :title, "やること" %>
+          <%= f.text_field :title, class: "form-control" %>
+      </div>
+      <div class= "form-group">
+          <%= f.label :body, "詳細" %>
+          <%= f.text_field :body, class: "form-control" %>
+      </div>
+          <%= f.submit "追加する", class: "btn btn-success" %>
+      <% end %>
+    </div>
+  </div>
+</div>
